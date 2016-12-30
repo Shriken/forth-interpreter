@@ -1,11 +1,11 @@
+use std::error::Error;
 use std::io;
 use std::io::BufRead;
 use std::io::Write;
 
 use forth;
-use forth::ForthError;
 
-pub fn run_shell(state: &mut forth::State) -> Result<(), ForthError> {
+pub fn run_shell(state: &mut forth::State) -> Result<(), Box<Error>> {
     let stdin = io::stdin();
     let locked = stdin.lock();
 

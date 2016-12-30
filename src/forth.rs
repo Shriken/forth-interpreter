@@ -1,8 +1,5 @@
-use std::convert;
 use std::error;
-use std::error::Error;
 use std::fmt;
-use std::io;
 
 pub struct State {
 }
@@ -13,32 +10,24 @@ impl State {
         }
     }
 
-    pub fn run_line(&mut self, line: String) -> Result<(), ForthError> {
+    pub fn run_line(&mut self, line: String) -> Result<(), Error> {
         Ok(())
     }
 }
 
 #[derive(Debug)]
-pub struct ForthError {
+pub struct Error {
     msg: String,
 }
 
-impl error::Error for ForthError {
+impl error::Error for Error {
     fn description(&self) -> &str { self.msg.as_ref() }
     fn cause(&self) -> Option<&error::Error> { None }
 }
 
-impl fmt::Display for ForthError {
+impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        try!(write!(f, "{}", self.description()));
+        try!(write!(f, "{}", error::Error::description(self)));
         Ok(())
-    }
-}
-
-impl convert::From<io::Error> for ForthError {
-    fn from(err: io::Error) -> ForthError {
-        ForthError {
-            msg: format!("io error: {}", err),
-        }
     }
 }

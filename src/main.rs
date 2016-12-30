@@ -27,7 +27,7 @@ fn main() {
     // Interpret input
     if args.len() == 0 {
         if let Err(err) = shell::run_shell(&mut state) {
-            error(&err);
+            error(&*err);
         }
     } else if args.len() == 1 {
         let file: File;
