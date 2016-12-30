@@ -1,0 +1,35 @@
+use std::io;
+use std::io::BufRead;
+use std::io::Write;
+
+use forth;
+use forth::ForthError;
+
+pub fn run_shell(state: &mut forth::State) -> Result<(), ForthError> {
+    let stdin = io::stdin();
+    let locked = stdin.lock();
+
+    prompt();
+    for l in locked.lines() {
+        let line = l?;
+        if line == "exit" {
+            break;
+        }
+
+        try!(state.run_line(line));
+        prompt();
+    }
+
+    //locked.unlock();
+    Ok(())
+}
+
+fn prompt() {
+    print!("> ");
+    let mut stdout = io::stdout();
+    loop {
+        if let Ok(_) = stdout.flush() {
+            break;
+        }
+    }
+}
