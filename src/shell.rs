@@ -19,6 +19,7 @@ pub fn run_shell(state: &mut forth::State) -> Result<(), Box<Error>> {
         try!(state.run_line(line));
         prompt();
     }
+    println!("");
 
     //locked.unlock();
     Ok(())
