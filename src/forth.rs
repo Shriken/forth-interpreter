@@ -33,11 +33,7 @@ pub struct Error {
     msg: String,
 }
 
-impl Error {
-    pub fn from(msg: &str) -> Error {
-        Error { msg: msg.to_string() }
-    }
-}
+impl Error {}
 
 impl error::Error for Error {
     fn description(&self) -> &str { self.msg.as_ref() }
@@ -49,4 +45,12 @@ impl fmt::Display for Error {
         try!(write!(f, "{}", error::Error::description(self)));
         Ok(())
     }
+}
+
+impl<'a> From<&'a str> for Error {
+    fn from(msg: &str) -> Error { Error { msg: msg.to_string() } }
+}
+
+impl From<String> for Error {
+    fn from(msg: String) -> Error { Error { msg: msg } }
 }
