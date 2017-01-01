@@ -1,6 +1,9 @@
 use std::error;
 use std::fmt;
 
+use token::Token;
+use token::tokenize;
+
 pub struct State {
 }
 
@@ -11,6 +14,14 @@ impl State {
     }
 
     pub fn run_line(&mut self, line: String) -> Result<(), Error> {
+        for token in tokenize(line) {
+            try!(self.parse_token(token));
+        }
+        Ok(())
+    }
+
+    fn parse_token(&mut self, token: Token) -> Result<(), Error> {
+        println!("{:?}", token);
         Ok(())
     }
 }
@@ -18,6 +29,12 @@ impl State {
 #[derive(Debug)]
 pub struct Error {
     msg: String,
+}
+
+impl Error {
+    pub fn from(msg: &str) -> Error {
+        Error { msg: msg.to_string() }
+    }
 }
 
 impl error::Error for Error {

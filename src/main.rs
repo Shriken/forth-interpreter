@@ -7,6 +7,7 @@ use std::process;
 
 mod shell;
 mod forth;
+mod token;
 
 fn main() {
     // Get the program arguments
