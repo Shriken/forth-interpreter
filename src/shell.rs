@@ -12,9 +12,7 @@ pub fn run_shell(state: &mut forth::State) -> Result<(), Box<Error>> {
                 println!("error: {}", e);
             },
             Err(readline::Error::EndOfFile) => break,
-            Err(e) => {
-                return Err(::std::convert::From::from(e));
-            }
+            Err(e) => return Err(::std::convert::From::from(e)),
         }
     }
 

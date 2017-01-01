@@ -7,11 +7,13 @@ use token::tokenize;
 pub type Number = i32;
 
 pub struct State {
+    value_stack: Vec<Number>,
 }
 
 impl State {
     pub fn new() -> State {
         State {
+            value_stack: Vec::new(),
         }
     }
 
@@ -23,7 +25,12 @@ impl State {
     }
 
     fn parse_token(&mut self, token: Token) -> Result<(), Error> {
-        println!("{:?}", token);
+        match token {
+            Token::Number(n) => self.value_stack.push(n),
+            _ => return Err(
+                Error::from(format!("token {:?} not handled", token))
+            ),
+        }
         Ok(())
     }
 }
