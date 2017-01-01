@@ -11,7 +11,7 @@ mod shell;
 mod token;
 mod forth;
 
-use forth::state::State;
+use forth::State;
 
 fn main() {
     // Get the program arguments

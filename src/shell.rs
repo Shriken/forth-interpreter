@@ -3,7 +3,7 @@ use readline::readline;
 
 use std::error::Error;
 
-use forth::state::State;
+use forth::State;
 
 pub fn run_shell(state: &mut State) -> Result<(), Box<Error>> {
     loop {
