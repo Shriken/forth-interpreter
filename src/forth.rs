@@ -4,6 +4,8 @@ use std::fmt;
 use token::Token;
 use token::tokenize;
 
+pub type Number = i32;
+
 pub struct State {
 }
 

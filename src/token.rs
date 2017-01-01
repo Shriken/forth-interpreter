@@ -1,7 +1,9 @@
+use forth;
+
 #[derive(Debug, PartialEq)]
 pub enum Token {
     Word(String),
-    Number(i32),
+    Number(forth::Number),
     OpenWordDef,
     CloseWordDef,
 }
@@ -15,7 +17,7 @@ const CLOSE_WORD_DEF_TOKEN: &'static str = ";";
 pub fn tokenize(line: String) -> Vec<Token> {
     line.split_whitespace()
         .map(|w| {
-            if let Ok(n) = w.parse::<i32>() {
+            if let Ok(n) = w.parse::<forth::Number>() {
                 return number!(n);
             }
 
