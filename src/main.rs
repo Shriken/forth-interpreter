@@ -8,8 +8,10 @@ use std::io::BufReader;
 use std::process;
 
 mod shell;
-mod forth;
 mod token;
+mod forth;
+
+use forth::state::State;
 
 fn main() {
     // Get the program arguments
@@ -25,7 +27,7 @@ fn main() {
         }
     }
 
-    let mut state = forth::State::new();
+    let mut state = State::new();
 
     // Interpret input
     if args.len() == 0 {

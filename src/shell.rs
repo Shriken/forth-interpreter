@@ -3,9 +3,9 @@ use readline::readline;
 
 use std::error::Error;
 
-use forth;
+use forth::state::State;
 
-pub fn run_shell(state: &mut forth::State) -> Result<(), Box<Error>> {
+pub fn run_shell(state: &mut State) -> Result<(), Box<Error>> {
     loop {
         match readline("> ") {
             Ok(line) => if let Err(e) = state.run_line(line.to_string()) {
