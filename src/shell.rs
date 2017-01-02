@@ -10,6 +10,8 @@ pub fn run_shell(state: &mut State) -> Result<(), Box<Error>> {
         match readline("> ") {
             Ok(line) => if let Err(e) = state.run_line(line.to_string()) {
                 println!("error: {}", e);
+            } else {
+                println!(" ok");
             },
             Err(readline::Error::EndOfFile) => break,
             Err(e) => return Err(::std::convert::From::from(e)),
