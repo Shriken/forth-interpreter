@@ -2,6 +2,7 @@ use token::Token;
 use token::tokenize;
 use forth;
 use forth::error::Error;
+use super::native_words::NATIVE_WORDS;
 
 pub struct State {
     value_stack: Vec<forth::Number>,
@@ -33,6 +34,12 @@ impl State {
     }
 
     fn run_word(&mut self, word: String) -> Result<(), Error> {
-        Ok(())
+        for &(name, func) in NATIVE_WORDS {
+            if word == name {
+                return func(&mut self.value_stack);
+            }
+        }
+
+        Err(Error::from(format!("word {} not recognized", word)))
     }
 }
