@@ -4,6 +4,7 @@ use forth::ValueStack;
 type NativeWordFunc = fn (&mut ValueStack) -> Result<(), Error>;
 
 pub const NATIVE_WORDS: &'static [(&'static str, NativeWordFunc)] = &[
+    ("_print_stack", debug_print_stack),
     (".", pop_and_print),
     ("+", add),
     ("-", sub),
@@ -23,6 +24,13 @@ macro_rules! try_pop_n {
             $stack.split_off(l - $n)
         }
     }}
+}
+
+fn debug_print_stack(stack: &mut ValueStack) -> Result<(), Error> {
+    for elem in stack {
+        print!("{} ", elem);
+    }
+    Ok(())
 }
 
 fn pop_and_print(stack: &mut ValueStack) -> Result<(), Error> {
