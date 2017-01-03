@@ -3,12 +3,19 @@ use std::collections::hash_map::HashMap;
 use forth;
 use forth::Error;
 use forth::native_words::NATIVE_WORDS;
+use forth::token::Token;
 use forth::token::tokenize;
-use forth::Token;
 
 pub struct State {
     value_stack: Vec<forth::Number>,
     dictionary: HashMap<String, Vec<Token>>,
+    mode: Mode,
+}
+
+enum Mode {
+    Normal,
+    WordDefName, // just saw OpenWordDef, looking for name
+    WordDefBody(String, Vec<Token>),
 }
 
 impl State {
@@ -16,6 +23,7 @@ impl State {
         State {
             value_stack: Vec::new(),
             dictionary: HashMap::new(),
+            mode: Mode::Normal,
         }
     }
 
@@ -27,13 +35,56 @@ impl State {
     }
 
     fn parse_token(&mut self, token: Token) -> Result<(), Error> {
-        match token {
-            Token::Number(n) => self.value_stack.push(n),
-            Token::Word(w) => try!(self.run_word(w)),
-            _ => return Err(
-                Error::from(format!("token {:?} not handled", token))
-            ),
+        let mut change_mode = false;
+        let mut new_mode: Mode = Mode::Normal;
+
+        match self.mode {
+            Mode::Normal => match token {
+                Token::Number(n) => self.value_stack.push(n),
+                Token::Word(w) => try!(self.run_word(w)),
+                Token::OpenWordDef => {
+                    change_mode = true;
+                    new_mode = Mode::WordDefName;
+                },
+                _ => return Err(Error::from(
+                    format!("token {:?} not handled", token)
+                )),
+            },
+
+            Mode::WordDefName => match token {
+                Token::Word(w) => {
+                    change_mode = true;
+                    new_mode = Mode::WordDefBody(w, Vec::new());
+                },
+                _ => return Err(Error::from(
+                    format!("expected word name, not {:?}", token)
+                )),
+            },
+
+            Mode::WordDefBody(ref name, ref mut body) => {
+                match token {
+                    Token::OpenWordDef => return Err(Error::from(
+                        format!("already in word definition")
+                    )),
+
+                    Token::CloseWordDef => {
+                        self.dictionary.insert(
+                            name.clone(),
+                            body.clone()
+                        );
+                        change_mode = true;
+                        new_mode = Mode::Normal;
+                    },
+
+                    _ => body.push(token.clone()),
+                }
+            },
         }
+
+        if change_mode {
+            self.mode = new_mode;
+        }
+
         Ok(())
     }
 
