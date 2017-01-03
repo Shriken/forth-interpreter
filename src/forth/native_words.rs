@@ -1,7 +1,7 @@
-use forth;
-use forth::error::Error;
+use forth::Error;
+use forth::ValueStack;
 
-type NativeWordFunc = fn (&mut forth::ValueStack) -> Result<(), Error>;
+type NativeWordFunc = fn (&mut ValueStack) -> Result<(), Error>;
 
 pub const NATIVE_WORDS: &'static [(&'static str, NativeWordFunc)] = &[
     (".", pop_and_print),
@@ -25,7 +25,7 @@ macro_rules! try_pop_n {
     }}
 }
 
-fn pop_and_print(stack: &mut forth::ValueStack) -> Result<(), Error> {
+fn pop_and_print(stack: &mut ValueStack) -> Result<(), Error> {
     match stack.pop() {
         Some(n) => {
             print!("{} ", n);
@@ -35,25 +35,25 @@ fn pop_and_print(stack: &mut forth::ValueStack) -> Result<(), Error> {
     }
 }
 
-fn add(stack: &mut forth::ValueStack) -> Result<(), Error> {
+fn add(stack: &mut ValueStack) -> Result<(), Error> {
     let args = try_pop_n!(stack, 2);
     stack.push(args[0] + args[1]);
     Ok(())
 }
 
-fn sub(stack: &mut forth::ValueStack) -> Result<(), Error> {
+fn sub(stack: &mut ValueStack) -> Result<(), Error> {
     let args = try_pop_n!(stack, 2);
     stack.push(args[0] - args[1]);
     Ok(())
 }
 
-fn mul(stack: &mut forth::ValueStack) -> Result<(), Error> {
+fn mul(stack: &mut ValueStack) -> Result<(), Error> {
     let args = try_pop_n!(stack, 2);
     stack.push(args[0] * args[1]);
     Ok(())
 }
 
-fn div(stack: &mut forth::ValueStack) -> Result<(), Error> {
+fn div(stack: &mut ValueStack) -> Result<(), Error> {
     let args = try_pop_n!(stack, 2);
     stack.push(args[0] / args[1]);
     Ok(())
