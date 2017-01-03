@@ -8,7 +8,6 @@ use std::io::BufReader;
 use std::process;
 
 mod shell;
-mod token;
 mod forth;
 
 use forth::State;

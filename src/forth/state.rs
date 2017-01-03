@@ -1,10 +1,10 @@
 use std::collections::hash_map::HashMap;
 
-use token::Token;
-use token::tokenize;
 use forth;
-use forth::error::Error;
-use super::native_words::NATIVE_WORDS;
+use forth::Error;
+use forth::native_words::NATIVE_WORDS;
+use forth::token::tokenize;
+use forth::Token;
 
 pub struct State {
     value_stack: Vec<forth::Number>,
