@@ -1,6 +1,6 @@
 use forth;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     Word(String),
     Number(forth::Number),
