@@ -1,6 +1,6 @@
 [package]
-name = "forth-interpreter"
-version = "0.1.0"
+name = "rforth"
+version = "1.0.0"
 authors = ["Zane Sterling <sterling.zane@gmail.com>"]
 
 [dependencies]
